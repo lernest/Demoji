@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+        <meta charset="utf-8">
+        <title>Demoji</title>
+        <link rel="stylesheet" href="css/twemoji-picker.css" />
+    </head>
+   
+    <body>
+        <h1> Demoji </h1>
+
+        <textarea id="twemoji-picker"></textarea>
+        <br> 
+        <button id="enter" onclick="demoj()">Demoj</button>       
+        <div id="output"><div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="js/twemoji-picker.js"></script>
+        
+        <script>
+            $('#twemoji-picker').twemojiPicker({
+                placeholder: 'Enter emojis',
+                icon: 'joy'
+            });
+           
+            // https://stackoverflow.com/questions/32597856/encode-emoji-to-unicode-code-point-php-js
+            function e2u(str){
+                str = str.replace(/\ufe0f|\u200d/gm, ''); // strips unicode variation selector and zero-width joiner
+                var i = 0, c = 0, p = 0, r = [];
+                while (i < str.length){
+                    c = str.charCodeAt(i++);
+                    if (p){
+                        r.push((65536+(p-55296<<10)+(c-56320)).toString(16));
+                        p = 0;
+                    } else if (55296 <= c && c <= 56319){
+                        p = c;
+                    } else {
+                        r.push(c.toString(16));
+                    }
+                }
+                return r.join('-');
+            }
+            
+            // grab text from the textbox and convert print out the unicode value
+            function demoj(){
+                var value = document.getElementById("twemoji-picker").value;                
+                document.getElementById('output').innerHTML = "Unicode: " + e2u(value);
+            }
+        </script>
+    </body>
+</html>
