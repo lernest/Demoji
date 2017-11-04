@@ -35,7 +35,7 @@
             });
            
             // https://stackoverflow.com/questions/32597856/encode-emoji-to-unicode-code-point-php-js
-            function e2u(str){
+            function emojiToUnicodeArray(str){
                 str = str.replace(/\ufe0f|\u200d/gm, ''); // strips unicode variation selector and zero-width joiner
                 var i = 0, c = 0, p = 0, r = [];
                 while (i < str.length){
@@ -49,13 +49,14 @@
                         r.push(c.toString(16));
                     }
                 }
-                return r.join('-');
+                return r;
             }
-            
+
             // grab text from the textbox and convert print out the unicode value
             function demoj(){
-                var value = document.getElementById("twemoji-picker").value;                
-                document.getElementById('output').innerHTML = "Unicode: " + e2u(value);
+                var value = document.getElementById("twemoji-picker").value;
+                var arr = emojiToUnicodeArray(value);                
+                document.getElementById('output').innerHTML = "Unicode: " + arr.toString();
             }
         </script>
     </body>
